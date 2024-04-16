@@ -1,0 +1,42 @@
+CREATE TABLE userdata (
+    userid INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    account_creation_date DATETIME NOT NULL,
+    admin_status BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE friends (
+    user1_id INT NOT NULL,
+    user2_id INT NOT NULL,
+    confirmation TINYINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (user1_id, user2_id),
+    FOREIGN KEY (user1_id) REFERENCES userdata(userid),
+    FOREIGN KEY (user2_id) REFERENCES userdata(userid),
+    CHECK (confirmation IN (0, 1))
+);
+
+CREATE TABLE posts (
+    userid INT NOT NULL,
+    user_post_id INT NOT NULL,
+    content TEXT NOT NULL,
+    image_url VARCHAR(255),
+    creation_date DATETIME NOT NULL,
+    PRIMARY KEY (userid, user_post_id),
+    FOREIGN KEY (userid) REFERENCES userdata(userid)
+);
+
+
+Example of how to implement iterating userpostid
+------------------------------------------------------------------------
+INSERT INTO posts (userid, user_post_id, content, image_url, creation_date)
+VALUES (
+    {userid},
+    (SELECT IFNULL(MAX(user_post_id), 0) + 1 FROM posts WHERE userid = {userid}),
+    {content},
+    {image_url},
+    NOW()
+);
+
+
