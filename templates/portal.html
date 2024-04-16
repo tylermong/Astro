@@ -10,6 +10,21 @@
                 background-color: #000000;
                 color: #EBD7FF;
                 margin: 0;
+                height: 100%; 
+                overflow: hidden; 
+            }
+            canvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: -1;
+            }
+            .content {
+                position: relative;
+                z-index: 1;
+                padding: 20px;
+                color: white;
+                font-family: Arial, sans-serif;
             }
             h1 {
                 font-size: 72px;
@@ -27,13 +42,20 @@
                 height: 100vh;
             }
             .alignment-container{
+                padding: 40px;
                 display: flex;
                 flex-direction: row;
+                background-color: rgba(5, 69, 105, 0.6);
+                border-radius: 10px;
             }
             .branding-box{
                 margin-right: 50px;
             }
+            .branding-box h2{
+                color: #9ccddc
+            }
             .name-and-icon {
+                color: #9ccddc;
                 display: flex;
                 align-items: center;
             }
@@ -58,6 +80,7 @@
                 margin-bottom: 10px;
                 border-radius: 5px;
                 font-family: inherit;
+                box-sizing: border-box;
                 background-color: #EBD7FF;
             }
             .sign-in input::placeholder {
@@ -65,7 +88,7 @@
             }
             .sign-in button {
                 width: 100%;
-                background-color: #972FFF;
+                background-color: #5591a9;
                 color: #EBD7FF;
                 border: none;
                 border-radius: 5px;
@@ -79,20 +102,32 @@
                 text-align: center;
             }
             .sign-up a {
-                color: #972FFF;
+                color: #5591a9;
                 font-weight: bold;
+            }
+            #particles-js {
+                background: black;
+                height: 100vh;
+                
+            }
+            #particles canvas{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
             }
         </style>
     </head>
     
     <body>
+        <canvas id="stars-background"></canvas>
         <div class="container">
             <div class="alignment-container">
                 <div class="branding-box">
                     <div class="name-and-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width = "72" height = "72" viewBox = "0 0 24 24" fill = "none"
-                             stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round"
-                             class = "icon icon-tabler icons-tabler-outline icon-tabler-moon-stars">
+                            stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round"
+                            class = "icon icon-tabler icons-tabler-outline icon-tabler-moon-stars">
                             <path stroke = "none" d = "M0 0h24v24H0z" fill = "none"/>
                             <path d = "M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>
                             <path d = "M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/>
@@ -105,7 +140,7 @@
                 <div class="form-container">
                     <div class="sign-in">
                         <form method="post">
-                            <input type="text" name="username" placeholder="Username" required>
+                            <input type="text" name="username" placeholder="Username" required">
                             <input type="password" name="password" placeholder="Password" required>
                             <button type="submit">Login</button>
                         </form>
@@ -118,4 +153,7 @@
             </div>
         </div>
     </body>
+
+<script src="../static/js/stars.js"></script>
+
 </html>
