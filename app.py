@@ -106,7 +106,7 @@ def profile(username):
         return render_template('profile.html', user=user)
     else:
         # Handle the case where the user is not found
-        return render_template('profile_not_found.html', username=username)
+        return "No profile!"
 
 
 @app.route("/messages")
@@ -136,4 +136,4 @@ def require_login_status(must_be_logged_out=False, must_be_admin=False, destinat
         abort(403)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=45710)
