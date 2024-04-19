@@ -1,50 +1,19 @@
-import os
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
+from models import db, User, Friend, Post, PrivateMessage
+import argon2
+import math
+import re
+
+hasher = argon2.PasswordHasher()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    userid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    account_creation_date = db.Column(db.DateTime, nullable=False)
-    admin_status = db.Column(db.Boolean, nullable=False, default=False)
-
-class Friend(db.Model):
-    user1_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    user2_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    confirmation = db.Column(db.Integer, nullable=False, default=0)
-    __table_args__ = (
-        db.PrimaryKeyConstraint('user1_id', 'user2_id'),
-        db.CheckConstraint('confirmation IN (0, 1)'),
-    )
-
-class Post(db.Model):
-    userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    user_post_id = db.Column(db.Integer, nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    image_url = db.Column(db.String(255))
-    creation_date = db.Column(db.DateTime, nullable=False)
-    __table_args__ = (
-        db.PrimaryKeyConstraint('userid', 'user_post_id'),
-    )
-
-class PrivateMessage(db.Model):
-    message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    message_text = db.Column(db.Text)
-    image_url = db.Column(db.String(255))
-    creation_date = db.Column(db.DateTime, nullable=False)
+db.init_app(app)
 
 with app.app_context():
     db.create_all()
-
 
 @app.route('/')
 def index():
@@ -55,19 +24,88 @@ def home():
     return "send to main page if not logged in"
 
 
-@app.route("/login")
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    # on post request recieved
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        user = User.query.filter_by(username=username).first()
+
+        if user and argon2.PasswordHasher().verify(user.password, password):
+            # set session variable
+            session['user_id'] = user.id
+            return redirect(url_for('profile', username=user.username))  # Redirect to user's profile
+        else:
+            # return error message
+            msg = 'Invalid username or password'
+            return render_template('login.html', msg=msg)
+
+    return render_template('login.html')
 
 
-@app.route("/register")
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template("register.html")
+    login_status = require_login_status(must_be_logged_out=True)
+    if login_status is not None:
+        return login_status
 
+    # default output message
+    msg = ''
+    # Check if "username", "password" and "email" exist
+    if (request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in
+            request.form):
 
-@app.route("/profile")
-def profile():
-    return render_template("profile.html")
+        # Create variables for easy access
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+
+        # Check if account exists using SQLAlchemy
+        account = User.query.filter_by(username=username).first()
+
+        if account:
+            msg = 'Account already exists!'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            msg = 'Invalid email address!'
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            msg = 'Username must contain only characters and numbers!'
+        elif len(password) < 5:
+            msg = 'Password too short!'
+        elif not username or not password or not email:
+            msg = 'Please fill out the form!'
+        else:
+            # Proceed with account creation
+            hashed_password = hasher.hash(password)
+            new_user = User(username=username, password=hashed_password, email=email)
+            db.session.add(new_user)
+            db.session.commit()
+            msg = 'You have successfully registered!'
+            return render_template('register.html', msg=msg)
+        
+    elif request.method == 'POST':
+        # Form is empty
+        msg = 'Please fill out the form!'
+
+    # Show registration form with message (if any)
+    return render_template('register.html', session=session, msg=msg)
+
+# example on how to link to profile {{ url_for('profile', username=user.username) }}
+@app.route('/profile/<username>')
+def profile(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return render_template('profile.html', user=user)
+    else:
+        # Handle the case where the user is not found
+        return render_template('profile_not_found.html', username=username)
+
 
 
 @app.route("/messages")
