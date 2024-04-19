@@ -27,16 +27,16 @@ CREATE TABLE posts (
     FOREIGN KEY (userid) REFERENCES userdata(userid)
 );
 
-
-Example of how to implement iterating userpostid
-------------------------------------------------------------------------
-INSERT INTO posts (userid, user_post_id, content, image_url, creation_date)
-VALUES (
-    {userid},
-    (SELECT IFNULL(MAX(user_post_id), 0) + 1 FROM posts WHERE userid = {userid}),
-    {content},
-    {image_url},
-    NOW()
+CREATE TABLE private_messages (
+    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message_text TEXT,
+    image_url VARCHAR(255),
+    creation_date DATETIME NOT NULL,
+    FOREIGN KEY (sender_id) REFERENCES userdata(userid),
+    FOREIGN KEY (receiver_id) REFERENCES userdata(userid)
 );
 
-
+INSERT INTO userdata (username, password, email, account_creation_date, admin_status)
+VALUES ('Admin', '@AstroAdmin2024', 'admin@example.com', NOW(), TRUE);
