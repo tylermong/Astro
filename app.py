@@ -17,13 +17,10 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-@app.route('/')
-def index():
-    return 'Hello, World!'
 
 @app.route("/")
 def home():
-    return "send to main page if not logged in"
+    return render_template('home.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -88,7 +85,7 @@ def register():
         else:
             # Proceed with account creation
             hashed_password = hasher.hash(password)
-            new_user = User(username=username, password=hashed_password, email=email, account_creation_date=datetime.now(), profile_image=".images\required\Default_Profile_Picture.png")
+            new_user = User(username=username, password=hashed_password, email=email, account_creation_date=datetime.now(), profile_image=".images\\required\\Default_Profile_Picture.png")
             db.session.add(new_user)
             db.session.commit()
             msg = 'You have successfully registered!'
