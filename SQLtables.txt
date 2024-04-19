@@ -1,10 +1,10 @@
 CREATE TABLE userdata (
-    userid INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT IDENTITY(1,1) PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     account_creation_date DATETIME NOT NULL,
-    admin_status BOOLEAN NOT NULL DEFAULT FALSE
+    admin_status BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE friends (
@@ -28,7 +28,7 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE private_messages (
-    message_id INT AUTO_INCREMENT PRIMARY KEY,
+    message_id INT IDENTITY(1,1) PRIMARY KEY,
     sender_id INT NOT NULL,
     receiver_id INT NOT NULL,
     message_text TEXT,
@@ -39,4 +39,4 @@ CREATE TABLE private_messages (
 );
 
 INSERT INTO userdata (username, password, email, account_creation_date, admin_status)
-VALUES ('Admin', '@AstroAdmin2024', 'admin@example.com', NOW(), TRUE);
+VALUES ('Admin', '@AstroAdmin2024', 'admin@example.com', GETDATE(), 1);
