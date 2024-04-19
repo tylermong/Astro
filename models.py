@@ -9,6 +9,8 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     account_creation_date = db.Column(db.DateTime, nullable=False)
     admin_status = db.Column(db.Boolean, nullable=False, default=False)
+    profile_image = db.Column(db.String(255), nullable=True)
+
 
 class Friend(db.Model):
     user1_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
@@ -23,7 +25,7 @@ class Post(db.Model):
     userid = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
     user_post_id = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    image_url = db.Column(db.String(255))
+    image_url = db.Column(db.String(255), nullable=True)
     creation_date = db.Column(db.DateTime, nullable=False)
     __table_args__ = (
         db.PrimaryKeyConstraint('userid', 'user_post_id'),
@@ -33,6 +35,6 @@ class PrivateMessage(db.Model):
     message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.userid'), nullable=False)
-    message_text = db.Column(db.Text)
-    image_url = db.Column(db.String(255))
+    message_text = db.Column(db.Text, nullable=True)
+    image_url = db.Column(db.String(255), nullable=True)
     creation_date = db.Column(db.DateTime, nullable=False)
