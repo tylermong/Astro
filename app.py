@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from models import db, User, Friend, Post, PrivateMessage
+from datetime import datetime
 import argon2
 import math
 import re
@@ -9,6 +10,7 @@ hasher = argon2.PasswordHasher()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.secret_key = '7c19a9c83258791f711591a505b467d9'
 
 db.init_app(app)
 
@@ -35,7 +37,7 @@ def login():
 
         if user and argon2.PasswordHasher().verify(user.password, password):
             # set session variable
-            session['user_id'] = user.id
+            session['user_id'] = user.userid
             return redirect(url_for('profile', username=user.username))  # Redirect to user's profile
         else:
             # return error message
@@ -63,9 +65,10 @@ def register():
             request.form):
 
         # Create variables for easy access
+        email = request.form['email']
         username = request.form['username']
         password = request.form['password']
-        email = request.form['email']
+        confirmPassword = request.form['confirm-password']
 
         # Check if account exists using SQLAlchemy
         account = User.query.filter_by(username=username).first()
@@ -78,12 +81,14 @@ def register():
             msg = 'Username must contain only characters and numbers!'
         elif len(password) < 5:
             msg = 'Password too short!'
+        elif password != confirmPassword:
+            msg = 'Passwords do not match!'
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
             # Proceed with account creation
             hashed_password = hasher.hash(password)
-            new_user = User(username=username, password=hashed_password, email=email)
+            new_user = User(username=username, password=hashed_password, email=email, account_creation_date=datetime.now())
             db.session.add(new_user)
             db.session.commit()
             msg = 'You have successfully registered!'
@@ -105,7 +110,6 @@ def profile(username):
     else:
         # Handle the case where the user is not found
         return render_template('profile_not_found.html', username=username)
-
 
 
 @app.route("/messages")
