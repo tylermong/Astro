@@ -1,3 +1,5 @@
 .images/messages/*
 .images/post/*
 .images/profile/*
+instance
+__pycache__
