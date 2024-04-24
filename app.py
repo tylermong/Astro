@@ -20,7 +20,7 @@ with app.app_context():
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+    return render_template('home.html', session=session)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -33,19 +33,25 @@ def login():
 
         if user: # statements have to be seperate
             if argon2.PasswordHasher().verify(user.password, password):
-                session['user_id'] = user.userid
-                return redirect(url_for('profile', username=user.username))  
+                session['loggedin'] = True
+                session['id'] = user.userid
+                session['username'] = user.username
+                session['profile_image'] = user.profile_image
+                session['admin'] = bool(user.admin_status)
+
+                return redirect(url_for('profile', username=session['username']))  
         else:
             msg = 'Invalid username or password'
             return render_template('login.html', msg=msg)
 
-    return render_template('login.html')
+    return render_template('login.html', session=session)
 
 
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))
+    return render_template('login.html', session=session)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -80,7 +86,7 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             msg = 'You have successfully registered!'
-            return render_template('register.html', msg=msg)
+            return render_template('register.html', session=session, msg=msg)
 
     elif request.method == 'POST':
         msg = 'Please fill out the form!'
@@ -93,25 +99,25 @@ def register():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     if user:
-        return render_template('profile.html', user=user)
+        return render_template('profile.html', session=session, username=username)
     else:
-        # Handle the case where the user is not found
-        return "No profile!"
+        return "No profile found!", 404
+
 
 
 @app.route("/messages")
 def messages():
-    return render_template("messages.html")
+    return render_template("messages.html", session=session)
 
 
 @app.route("/settings")
 def settings():
-    return render_template("settings.html")
+    return render_template("settings.html", session=session)
 
 
 @app.route("/notifications")
 def notifications():
-    return render_template("notifications.html")
+    return render_template("notifications.html", session=session)
 
 
 # check status of user
