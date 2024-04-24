@@ -25,19 +25,17 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # on post request recieved
     if request.method == 'POST':
-        username = request.form.get('username')
+        username = request.form.get('username').strip().lower()
         password = request.form.get('password')
         
         user = User.query.filter_by(username=username).first()
 
-        if user and argon2.PasswordHasher().verify(user.password, password):
-            # set session variable
-            session['user_id'] = user.userid
-            return redirect(url_for('profile', username=user.username))  # Redirect to user's profile
+        if user: # statements have to be seperate
+            if argon2.PasswordHasher().verify(user.password, password):
+                session['user_id'] = user.userid
+                return redirect(url_for('profile', username=user.username))  
         else:
-            # return error message
             msg = 'Invalid username or password'
             return render_template('login.html', msg=msg)
 
@@ -55,19 +53,13 @@ def register():
     if login_status is not None:
         return login_status
 
-    # default output message
     msg = ''
-    # Check if "username", "password" and "email" exist
-    if (request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in
-            request.form):
-
-        # Create variables for easy access
-        email = request.form['email']
-        username = request.form['username']
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+        email = request.form['email'].strip()
+        username = request.form['username'].strip().lower()
         password = request.form['password']
         confirmPassword = request.form['confirm-password']
 
-        # Check if account exists using SQLAlchemy
         account = User.query.filter_by(username=username).first()
 
         if account:
@@ -83,20 +75,18 @@ def register():
         elif not username or not password or not email:
             msg = 'Please fill out the form!'
         else:
-            # Proceed with account creation
             hashed_password = hasher.hash(password)
             new_user = User(username=username, password=hashed_password, email=email, account_creation_date=datetime.now(), profile_image=".images\\required\\Default_Profile_Picture.png")
             db.session.add(new_user)
             db.session.commit()
             msg = 'You have successfully registered!'
             return render_template('register.html', msg=msg)
-        
+
     elif request.method == 'POST':
-        # Form is empty
         msg = 'Please fill out the form!'
 
-    # Show registration form with message (if any)
     return render_template('register.html', session=session, msg=msg)
+
 
 # example on how to link to profile {{ url_for('profile', username=user.username) }}
 @app.route('/profile/<username>')
