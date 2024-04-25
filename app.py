@@ -82,7 +82,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             hashed_password = hasher.hash(password)
-            new_user = User(username=username, password=hashed_password, email=email, account_creation_date=datetime.now(), profile_image=".images\\required\\Default_Profile_Picture.png")
+            new_user = User(username=username, password=hashed_password, email=email, account_creation_date=datetime.now(), profile_image=".images\\required\\Default_Banner_Picture.png", banner_image=".images\\required\\Default_Profile_Picture.png")
             db.session.add(new_user)
             db.session.commit()
             msg = 'You have successfully registered!'
@@ -119,6 +119,29 @@ def settings():
 def notifications():
     return render_template("notifications.html", session=session)
 
+
+@app.route('/create_post', methods=['POST'])
+def create_post():
+    if 'username' in session:
+        username = session['username']
+        user = User.query.filter_by(username=username).first()
+        if user:
+            content = request.form.get('content')
+            image_url = request.form.get('image_url')
+
+            new_post = Post(userid=user.userid,
+                            content=content,
+                            image_url=image_url,
+                            creation_date=datetime.now())
+
+            db.session.add(new_post)
+            db.session.commit()
+
+            return redirect(url_for('home'))
+        else:
+            return "User not found", 404
+    else:
+        return redirect(url_for('login'))
 
 # check status of user
 def require_login_status(must_be_logged_out=False, must_be_admin=False, destination='profile'):

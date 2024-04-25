@@ -31,10 +31,10 @@
                 align-items: center;
             }
             .left-section-content svg {
-                color: #EBD7FF;
+                color: #9ccddc;
             }
             .left-section-content a {
-                color: #EBD7FF;
+                color: #9ccddc;
                 font-size: 20px;
                 text-decoration: none;
                 margin: 10px;
@@ -46,14 +46,14 @@
                 align-items: center;
                 padding-left: 25%;
                 width: 60%;
-                color: #EBD7FF;
+                color: #9ccddc;
             }
             .publish-post-container {
                 display: flex;
                 flex-direction: column;
                 align-items: start;
                 width: 100%;
-                border: 1px solid #EBD7FF;
+                border: 1px solid #062c43;
             }
             .publish-post-container form {
                 display: flex;
@@ -65,7 +65,7 @@
                 width: 80%;
                 font-family: inherit;
                 background-color: #000000;
-                color: #EBD7FF;
+                color: #062c43;
                 padding: 10px;
                 border: none;
                 outline: none;
@@ -75,8 +75,8 @@
             }
             .publish-post-container button {
                 width: 20%;
-                background-color: #972FFF;
-                color: #EBD7FF;
+                background-color: #5591a9;
+                color: #062c43;
                 border: none;
                 border-radius: 20px;
                 font-weight: bold;
@@ -89,7 +89,7 @@
                 flex-direction: column;
                 align-items: center;
                 width: 100%;
-                border: 1px solid #EBD7FF;
+                border: 1px solid #062c43;
                 border-top: none;
             }
             .post-container {
@@ -97,7 +97,7 @@
                 flex-direction: column;
                 align-items: start;
                 width: 100%;
-                border-bottom: 1px solid #EBD7FF;
+                border-bottom: 1px solid #062c43;
             }
             .user-info {
                 display: flex;
@@ -123,6 +123,32 @@
                 justify-content: center;
                 align-items: center;
                 width: 25%;
+            }
+            .profile-items{
+                height: 30%;
+                text-align: left;
+                vertical-align: bottom;
+                padding: 20px;
+                padding-bottom: 10%;
+            }
+            .profile-image{
+                width: 13%;
+                height: auto;
+                border: black solid 8px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+            .profile-items .nameplate{
+                width: 100%;
+            }
+            .banner{
+                width: 100%;
+                height: auto;
+            }
+            .username{
+                color: #9ccddc;
+                font-size: xx-large;
+                
             }
         </style>
     </head>
@@ -155,12 +181,14 @@
         </div>
 
         <div class = "center-section-container">
-            <div class = "publish-post-container">
-                <form>
-                    <textarea placeholder = "What's going on?"></textarea>
-                    <button>Post</button>
-                </form>
+            <div class = "profile-items">
+                <img class="banner" src="https://via.placeholder.com/1000x400">
+                <div class="nameplate">
+                    <img class="profile-image" src = "https://via.placeholder.com/250" alt = "Profile Picture">
+                    <span class="username">TEST USERNAME</span>
+                </div>
             </div>
+
 
             <div class = "feed-container">
                 <div class = "post-container">
@@ -172,6 +200,9 @@
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                     </div>
                 </div>
+        </div>
+
+            
 
                 <div class = "post-container">
                     <div class = "user-info">
