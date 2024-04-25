@@ -40,6 +40,7 @@
                 margin: 10px;
             }
             .center-section-container {
+                overflow: hidden;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -125,30 +126,38 @@
                 width: 25%;
             }
             .profile-items{
+                width: 100%;
                 height: 30%;
                 text-align: left;
                 vertical-align: bottom;
                 padding: 20px;
-                padding-bottom: 10%;
             }
             .profile-image{
-                width: 13%;
+                width: 18%;
                 height: auto;
                 border: black solid 8px;
                 border-radius: 50%;
                 margin-right: 10px;
-            }
-            .profile-items .nameplate{
-                width: 100%;
+                min-width: 15%;
+                min-height: 20%;
             }
             .banner{
-                width: 100%;
-                height: auto;
+                overflow: hidden;
+                width: auto;
+                height: 5%;
+                max-height: 300px;
+                max-width: fit-content;
             }
+            .nameplate{ 
+                position: relative; 
+                top: -50px;
+                left: 20px;
+            } 
             .username{
+                position: relative; 
+                top: -40px;
                 color: #9ccddc;
-                font-size: xx-large;
-                
+                font-size: 50px;
             }
         </style>
     </head>
@@ -182,10 +191,12 @@
 
         <div class = "center-section-container">
             <div class = "profile-items">
-                <img class="banner" src="https://via.placeholder.com/1000x400">
+                <div class="banner">
+                    <img src="https://via.placeholder.com/1000x400">
+                </div>
                 <div class="nameplate">
                     <img class="profile-image" src = "https://via.placeholder.com/250" alt = "Profile Picture">
-                    <span class="username">TEST USERNAME</span>
+                    <span class="username">{{ username }}</span>
                 </div>
             </div>
 

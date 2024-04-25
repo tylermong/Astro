@@ -99,7 +99,7 @@ def register():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     if user:
-        return render_template('profile.html', session=session, username=username)
+        return render_template('profile.html', session=session, username=username.capitalize())
     else:
         return "No profile found!", 404
 
