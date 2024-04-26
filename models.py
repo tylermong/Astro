@@ -28,6 +28,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.String(255), nullable=True)
     creation_date = db.Column(db.DateTime, nullable=False)
+    user = db.relationship('User', backref=db.backref('posts', lazy=True))
 
 
 class PrivateMessage(db.Model):

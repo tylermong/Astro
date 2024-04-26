@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session, abort
+import os
+from flask import Flask, render_template, request, redirect, send_from_directory, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
 from models import db, User, Friend, Post, PrivateMessage
 from datetime import datetime
 import argon2
@@ -11,16 +13,45 @@ hasher = argon2.PasswordHasher()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.secret_key = '7c19a9c83258791f711591a505b467d9'
+app.config['UPLOAD_FOLDER'] = '.images/posts'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # limit uploads to 16MB
+FILETYPES = {'png', 'jpg', 'jpeg', 'gif'}
 
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in FILETYPES
 
-@app.route("/")
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html', session=session)
+    if request.method == 'POST':
+        content = request.form['content']
+        image = request.files['image']
+        image_url = None
+
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image_name = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{filename}"
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_name)
+            os.makedirs(os.path.dirname(image_path), exist_ok=True)
+            image.save(image_path)
+            image_url = url_for('uploaded_file', filename=image_name)
+
+        new_post = Post(userid=session["id"], content=content, image_url=image_url, creation_date=datetime.now())
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for('home'))
+
+    posts = Post.query.all()
+    return render_template('home.html', session=session, posts=posts)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -50,7 +81,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return render_template('login.html', session=session)
+    return redirect(url_for('login'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
