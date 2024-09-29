@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Home - Astro</title>
+        <title>Edit Profile</title>
 
         <style>
             body {
@@ -48,56 +48,19 @@
                 width: 60%;
                 color: #9ccddc;
             }
-            #post-window {
-                display: none;
-                position: fixed;
-                z-index: 1; 
-                width: 100%;
-                height: 100%;  
-                background-color: rgb(0,0,0);
-                background-color: rgba(0,0,0,0.4);
-                margin: 0;
-            }
-            .post-form{
-                border: 2px solid #062c43;
-                background-color: black;
-                border-radius: 10px;
-                margin: auto;
-                margin-top: 10%;
-                width: 60%;
-                overflow: visible;
-            }
-            .post-form form {
-                padding: 20px;
-                margin: auto;
+            .edit-container {
+                overflow: hidden;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
-            }
-            .post-form textarea {
-                width: 80%;
-                font-family: inherit;
-                color: #5591a9;
-                padding: 10px;
-                border: none;
-                outline: none;
-                resize: vertical;
-                overflow: hidden;
-                align-self: start;
-                resize: none;
-                background-color: black;
-                border: dotted 2px #062c43;
-            }
-            .post-form button {
-                width: 20%;
-                background-color: #5591a9;
-                color: #062c43;
-                border: none;
-                border-radius: 20px;
-                font-weight: bold;
-                margin: 10px;
-                padding: 10px;
-                align-self: end;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+                margin-top: 15px;
+                padding: 10px;                
+                width: auto;
+                color: #9ccddc;
+                background-color: #062A3F;
+                border-radius: 8px;
             }
             input[type="file"] {
                 display: none;
@@ -120,19 +83,8 @@
                 border: 1px solid #062c43;
                 border-top: none;
             }
-            .change-feed{
-                padding: 0px;
-                font-size: 35px;
-                flex-direction: column;
-                text-align: center;
-                align-items: center;
-                width: 100%;
-                border: 1px solid #062c43;
-                border-top: none;
-            }
             .post-container {
                 display: flex;
-                overflow: hidden;
                 flex-direction: column;
                 align-items: start;
                 width: 100%;
@@ -141,10 +93,10 @@
             .post-image{
                 width: auto;
                 height: 500px;
+                max-width: 500px;
                 max-height: 500px;
             }
             .user-info {
-                width: 100%;
                 display: flex;
                 align-items: center;
                 padding: 10px 0 0 10px;
@@ -175,82 +127,69 @@
                 align-items: center;
                 width: 25%;
             }
-            .toggle-post-form {
-                font-size: 20px;
-                right: 50px;
-                bottom: 20px;
-                position: fixed;
-                font-size: 20px;
-                font-weight: 100;
-                border: none;
-                border-radius: 15px;
-                background-color: #5591a9;
-                color: #062c43;
-                z-index: 100;
-                height: 50px;
-                width: 75px;
-            }         
-            .change-feed table{
+            .profile-items{
                 width: 100%;
-                padding: 0px;
+                height: 30%;
+                text-align: left;
+                vertical-align: bottom;
+                padding: 20px;
             }
-            .change-feed table a{
-               color: #9ccddc;
-               text-decoration: none;
+            .profile-image{
+                height: auto;
+                border: black solid 8px;
+                border-radius: 50%;
+                margin-right: 10px;
+                width: 150px;
+                height: 150px;
             }
-            .change-feed td{
-                width: 50%;
-                margin: auto;
-                transition: box-shadow 0.3s ease-in-out;
-                position: relative;
-
+            .banner{
+                overflow: hidden;
+                width: auto;
+                height: 5%;
+                max-height: 300px;
+                max-width: fit-content;
             }
-            .change-feed td:hover {
-                offset: -10px;
-                box-shadow: inset 0 -15px 15px -10px rgba(85, 145, 169, 0.5);
+            .banner img{
+                width: 1500px;
+                height: 500px;
             }
-            .pagination-buttons {
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            .nameplate{ 
+                position: relative; 
+                top: -50px;
+                left: 20px;
+            } 
+            .username{
+                position: relative; 
+                top: -40px;
+                color: #9ccddc;
+                font-size: 50px;
             }
-            .pagination-button {
+            .follow-button button {
+                background-color: #007bff;
+                color: white;
+                border: none;
                 padding: 5px 10px;
-                margin: 0 5px;
-                background-color: #5591a9;
-                color: #062c43;
-                text-decoration: none;
-                border-radius: 3px;
+                margin-top: 10px;
+                cursor: pointer;
             }
-            .pagination-button:hover {
-                background-color: #4e859a;
-                color: #062c43;
+            .follow-button button:hover {
+                background-color: #0056b3;
             }
-            .post-date {
-                font-size: 12px;
-                color: #759ba7;
+            .unfollow-button button {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                margin-top: 10px;
+                cursor: pointer;
+            }
+            .unfollow-button button:hover {
+                background-color: #c82333;
             }
         </style>
     </head>
 
     <body>
-        <button class="toggle-post-form" onclick="togglePostWindow()">Post</button>
-
-        <div id="post-window">
-            <div class = "post-form">
-                <button class="custom-file-upload" onclick="togglePostWindow()" style="align-self: flex-end;">Close</button>
-                <form method="POST" action="{{ url_for('home') }}" enctype="multipart/form-data">
-                    <textarea rows="4" cols="50" maxlength="500" name="content" placeholder="What's on your mind?"></textarea>
-                    <br>
-                    <label for="file-upload" class="custom-file-upload">
-                        <i class="fa fa-cloud-upload"></i> Upload Files
-                    </label>
-                    <input id="file-upload" type="file" class="custom-file-upload" name="image" accept="image/*"><br>
-                    <button type="submit">Post</button>
-                </form>
-            </div>
-        </div>
-
         <div class = "left-section-container">
             <div class = "left-section-content">
                 <svg xmlns = "http://www.w3.org/2000/svg" width = "72" height = "72" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round" class = "icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke = "none" d = "M0 0h24v24H0z" fill = "none"/><path d = "M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/><path d = "M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/><path d = "M19 11h2m-1 -1v2" /></svg>
@@ -281,77 +220,33 @@
             </div>
         </div>
 
-        <div class = "center-section-container">
-            <div class="change-feed">
-                <table>
-                    <tr>
-                        <td>
-                            <a href="?show_friends=yes">Friends</a>
-                        </td>
-                        <td>
-                            <a href="?show_friends=no">Recent</a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-
-            <div class="feed-container">
-                {% for post in posts %}
-                <div class="post-container">
-                    <div class="user-info">
-                        <img src="{{ post.author.profile_image }}" alt="Profile Picture">
-                        <a style="text-decoration: none;" href="{{ url_for('profile', username=post.author.username) }}">{{ post.author.username }} </a>
-                        <span class="post-date">- {{ post.creation_date.strftime('%Y/%m/%d %H:%M') }}</span>
-                    </div>
-                    <div class="post-content">
-                        {% if post.image_url %}
-                        <img class="post-image" src="{{ post.image_url }}" alt="Post Image">
-                        {% endif %}
-                        <p style="max-width: fit-content; word-break: break-all; white-space: normal;">{{ post.content }}</p>
-                    </div>
-                </div>
-                {% endfor %}
-            
-                <div class="pagination">
-                    {% if total_pages > 1 %}
-                    <div class="pagination-buttons">
-                        {% if page != 1 %}
-                        <a class="pagination-button" href="{{ url_for('home', page=1, count=count, show_friends=show_friends) }}">First</a>
-                        <a class="pagination-button" href="{{ url_for('home', page=page-1, count=count, show_friends=show_friends) }}">Previous</a>
-                        {% endif %}
+        <div class="center-section-container">
+            <div class="edit-container">
+                <h1>Edit Profile</h1>
+                <form method="POST" enctype="multipart/form-data">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" required><br>
+        
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required><br><br>
+        
+                    <label for="profile_image" class="custom-file-upload" onclick="uploadFile('profile_image')">
+                        <i class="fa fa-cloud-upload"></i> Upload Profile Picture
+                    </label>
+                    <input type="file" id="profile_image" name="profile_image" accept="image/*" style="display:none;"><br><br><br>
+        
+                    <label for="banner_image" class="custom-file-upload" onclick="uploadFile('banner_image')">
+                        <i class="fa fa-cloud-upload"></i> Upload Banner
+                    </label>
+                    <input type="file" id="banner_image" name="banner_image" accept="image/*" style="display:none;"><br><br>
+        
+                    <button type="submit">Update Profile</button> <a href="{{ url_for('profile', username=user.username) }}"><button>Cancel</button></a>
+                </form>
                 
-                        {% for p in pagerange %}
-                        <a class="pagination-button {% if p == page %}active{% endif %}" href="{{ url_for('home', page=p, count=count, show_friends=show_friends) }}">{{ p }}</a>
-                        {% endfor %}
-                
-                        {% if page != total_pages %}
-                        <a class="pagination-button" href="{{ url_for('home', page=page+1, count=count, show_friends=show_friends) }}">Next</a>
-                        <a class="pagination-button" href="{{ url_for('home', page=total_pages, count=count, show_friends=show_friends) }}">Last</a>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            
-
             </div>
         </div>
 
         <div class = "right-section-container">
         </div>
     </body>
-
-    <script>
-       const postForm = document.querySelector('#post-window');
-
-        function togglePostWindow() {
-            if (postForm.style.display === 'none' || postForm.style.display === '') {
-                postForm.style.display = 'block';
-            } else {
-                postForm.style.display = 'none';
-            }
-        }
-    </script>
-
 </html>

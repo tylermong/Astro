@@ -4,7 +4,234 @@
     <meta charset="UTF-8">
     <title>Settings - Astro</title>
 </head>
-<body>
 
+<style>
+    body {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        font-family: Verdana, sans-serif;
+        background-color: #000000;
+    }
+    .left-section-container {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 20%;
+        padding-left: 5%;
+    }
+    .left-section-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 65%;
+    }
+    .left-section-content div {
+        display: flex;
+        align-items: center;
+    }
+    .left-section-content svg {
+        color: #9ccddc;
+    }
+    .left-section-content a {
+        color: #9ccddc;
+        font-size: 20px;
+        text-decoration: none;
+        margin: 10px;
+    }
+    .center-section-container {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-left: 25%;
+        width: 60%;
+        color: #9ccddc;
+    }
+    .feed-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        border: 1px solid #062c43;
+        border-top: none;
+    }
+    .post-container {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 100%;
+        border-bottom: 1px solid #062c43;
+    }
+    .post-image{
+        width: auto;
+        height: 500px;
+        max-width: 500px;
+        max-height: 500px;
+    }
+    .user-info {
+        display: flex;
+        align-items: center;
+        padding: 10px 0 0 10px;
+    }
+    .user-info a{
+        font-style: normal;
+        color: #9ccddc;
+    }
+    .user-info img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .post-content {
+        display: flex;
+        flex-direction: column;
+        text-align: justify;
+        padding: 0 20px 0 20px;
+    }
+    .post-content img {
+        margin: 20px 20px 20px 0;
+    }
+    .right-section-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 25%;
+    }
+    .profile-items{
+        width: 100%;
+        height: 30%;
+        text-align: left;
+        vertical-align: bottom;
+        padding: 20px;
+    }
+    .profile-image{
+        height: auto;
+        border: black solid 8px;
+        border-radius: 50%;
+        margin-right: 10px;
+        width: 150px;
+        height: 150px;
+    }
+    .banner{
+        overflow: hidden;
+        width: auto;
+        height: 5%;
+        max-height: 300px;
+        max-width: fit-content;
+        width: 1500px;
+        height: 500px;
+    }
+    .banner img{
+        width: 100%;
+        height: 100%;
+    }
+    .nameplate{ 
+        position: relative; 
+        top: -50px;
+        left: 20px;
+    } 
+    .username{
+        position: relative; 
+        top: -40px;
+        color: #9ccddc;
+        font-size: 50px;
+    }
+    .follow-button button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .follow-button button:hover {
+        background-color: #0056b3;
+    }
+
+    .unfollow-button button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .unfollow-button button:hover {
+        background-color: #c82333;
+    }
+
+    .toggle-post-form {
+        font-size: 20px;
+        right: 50px;
+        bottom: 20px;
+        position: fixed;
+        font-size: 20px;
+        font-weight: 100;
+        border: none;
+        border-radius: 15px;
+        background-color: #5591a9;
+        color: #062c43;
+        z-index: 100;
+        height: 50px;
+        width: 75px;
+    }
+    a{
+        text-decoration: none;
+        color: #9ccddc;
+    }
+    .notification{
+        padding: 10px;
+    }
+    
+</style>
+</head>
+
+<body>
+<div class = "left-section-container">
+    <div class = "left-section-content">
+        <svg xmlns = "http://www.w3.org/2000/svg" width = "72" height = "72" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" stroke-width = "2" stroke-linecap = "round" stroke-linejoin = "round" class = "icon icon-tabler icons-tabler-outline icon-tabler-moon-stars"><path stroke = "none" d = "M0 0h24v24H0z" fill = "none"/><path d = "M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/><path d = "M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2"/><path d = "M19 11h2m-1 -1v2" /></svg>
+        <div class = "home-button">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+            <a href="{{ url_for('home') }}">Home</a>
+        </div>
+        <div class = "notifications-button">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-bell"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
+            <a href = "{{ url_for('notifications') }}">Notifications</a>
+        </div>
+        <div class = "messages-button">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-messages"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 14l-3 -3h-7a1 1 0 0 1 -1 -1v-6a1 1 0 0 1 1 -1h9a1 1 0 0 1 1 1v10" /><path d="M14 15v2a1 1 0 0 1 -1 1h-7l-3 3v-10a1 1 0 0 1 1 -1h2" /></svg>
+            <a href = "{{ url_for('messages') }}">Messages</a>
+        </div>
+        <div class = "profile-button">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+            <a href="{{ url_for('profile', username=session['username']) }}">Profile</a>
+        </div>
+        <div class = "settings-button">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+            <a href = "{{ url_for('settings') }}">Settings</a>
+        </div>
+        <div class="logout-button">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+</div>
+
+<div class = "center-section-container">
+    <h1>Settings</h1>
+
+    <h2>Under construction</h2>
+    
+</div>
+
+<div class = "right-section-container">
+</div>
 </body>
 </html>
