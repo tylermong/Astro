@@ -1,5 +1,6 @@
 # 🌌 Astro
 **Astro** is a full-featured social media platform that allows users to share posts, comment on shared content, send direct messages, and customize their profiles, creating a dynamic and engaging community experience. Designed for user-friendly interaction, Astro fosters connections and encourages content sharing, making it an ideal space for individuals to express themselves and build relationships.
+![Showcase](./static/images/required/Showcase.png)
 
 ## 📋 Features
 - **🗨️ Posts & Comments**  
